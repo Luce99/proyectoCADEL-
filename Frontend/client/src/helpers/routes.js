@@ -5,6 +5,7 @@ const routes = {
     register: '/register',
     account: '/account',
     projects: '/projects',
+    avances: '/avances',
     InscriptionPage: '/inscription',
     project: (projectId)=> projectId ? `/projects/:${projectId}` : '/projects/:projectId',
     users: {

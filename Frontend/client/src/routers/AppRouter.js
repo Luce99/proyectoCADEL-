@@ -13,6 +13,7 @@ import roles from '../helpers/roles'
 import routes from '../helpers/routes'
 import InscriptionPage from '../pages/InscriptionPage'
 import LiderPage from '../pages/admin/liderPage'
+import AvancesPage from '../pages/AvancesPage'
 
 
 export default function AppRouter(){
@@ -24,6 +25,7 @@ export default function AppRouter(){
             
 
               <PrivateRoute exact path={routes.account} component={AccountPage} />
+              <PublicRoute exact path={routes.avances} component={AvancesPage} />
               <PublicRoute exact path={routes.projects} component={ProjectsPage} />
               <PublicRoute exact path={routes.InscriptionPage} component={InscriptionPage}/>
               <PublicRoute exact path={routes.project()} component={ProjectPage} />
