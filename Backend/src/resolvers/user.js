@@ -11,12 +11,12 @@ const userResolvers = {
             let user = await userService.getUserById(args._id)
             return user
         },
+    },
+    Mutation:{
         login: async (parent, args) => {
             const user = await userService.login(args)
             return user
-        }
-    },
-    Mutation:{
+        },
         createUser: async(parent, args) => {
             let user = await userService.createUser(args)
             return user

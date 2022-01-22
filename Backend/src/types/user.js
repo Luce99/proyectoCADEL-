@@ -13,7 +13,18 @@ type User{
     estado: String!
     correo: String!
     contrasena: String!
+    role: Rol
     projects: [Project!]
+}
+
+type Rol {
+    nombre: String!
+    permisos: [Permiso!]
+}
+
+type Permiso {
+    nombre: String
+    accion: String
 }
 
 type Project{
@@ -33,7 +44,6 @@ type Project{
 type Query {
     getUsers: [User]
     getUserById(_id:String!): User
-    login(correo: String!, contrasena: String!): User
 }
 type Mutation {
     createUser(
@@ -44,7 +54,9 @@ type Mutation {
         estado: String
         correo: String!
         contrasena: String!
+        role: ID!
         ): User
+    login(correo: String!, contrasena: String!): User
     updateUser(
         _id: ID!
         nombre: String
@@ -54,6 +66,7 @@ type Mutation {
         estado: String
         correo: String
         contrasena: String
+        role: ID!
         ): User
     deleteUser(
         _id: ID!

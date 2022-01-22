@@ -7,7 +7,6 @@ import routes from "../helpers/routes";
 import { Link } from "react-router-dom";
 
 export default function ProjectsPage() {
-
   //Modal
   const [
     isOpenEditModalProjects,
@@ -21,78 +20,90 @@ export default function ProjectsPage() {
   const [objetivosEspecificos, setObjetivosEspecificos] = useState("");
   const [fechaInicio, setFechaInicio] = useState("");
   const [fechaTerminacion, setFechaTerminacion] = useState("");
-  var   [presupuesto, setPresupuesto] = useState(0);
+  var [presupuesto, setPresupuesto] = useState(0);
   const [owner, setOwner] = useState("");
   const [estadoProyecto, setEstadoProyecto] = useState("");
   const [faseProyecto, setFaseProyecto] = useState("");
 
   const getProjects = gql`
     query getProjects {
-  getProjects {
-    _id
-    nombre
-    objetivosGenerales
-    objetivosEspecificos
-    fechaInicio
-    fechaTerminacion
-    estadoProyecto
-    faseProyecto
-    presupuesto
-    owner
-  }
-}
+      getProjects {
+        _id
+        nombre
+        objetivosGenerales
+        objetivosEspecificos
+        fechaInicio
+        fechaTerminacion
+        estadoProyecto
+        faseProyecto
+        presupuesto
+        owner
+      }
+    }
   `;
 
   const createProject = gql`
-mutation createProject($nombre: String!, $objetivosGenerales: String!, $objetivosEspecificos: String!, $fechaInicio: DateTime!, $fechaTerminacion: DateTime!,  $presupuesto: Float!, $owner: ID!) {
-  createProject(nombre: $nombre, objetivosGenerales: $objetivosGenerales, objetivosEspecificos: $objetivosEspecificos, fechaInicio: $fechaInicio, fechaTerminacion: $fechaTerminacion, presupuesto: $presupuesto, owner: $owner) {
-    _id
-    nombre
-    objetivosGenerales
-    objetivosEspecificos
-    fechaInicio
-    fechaTerminacion
-    presupuesto
-    owner
-  }
-}`;
+    mutation createProject(
+      $nombre: String!
+      $objetivosGenerales: String!
+      $objetivosEspecificos: String!
+      $fechaInicio: DateTime!
+      $fechaTerminacion: DateTime!
+      $presupuesto: Float!
+      $owner: ID!
+    ) {
+      createProject(
+        nombre: $nombre
+        objetivosGenerales: $objetivosGenerales
+        objetivosEspecificos: $objetivosEspecificos
+        fechaInicio: $fechaInicio
+        fechaTerminacion: $fechaTerminacion
+        presupuesto: $presupuesto
+        owner: $owner
+      ) {
+        _id
+        nombre
+        objetivosGenerales
+        objetivosEspecificos
+        fechaInicio
+        fechaTerminacion
+        presupuesto
+        owner
+      }
+    }
+  `;
 
   //eliminar
   const deleteProject = gql`
-  mutation deleteProject($id: ID!) {
-  deleteProject(_id: $id) {
-    _id
-    nombre
-    objetivosGenerales
-    objetivosEspecificos
-    fechaInicio
-    fechaTerminacion
-    estadoProyecto
-    faseProyecto
-    presupuesto
-    owner
-  }
-}`
-
+    mutation deleteProject($id: ID!) {
+      deleteProject(_id: $id) {
+        _id
+        nombre
+        objetivosGenerales
+        objetivosEspecificos
+        fechaInicio
+        fechaTerminacion
+        estadoProyecto
+        faseProyecto
+        presupuesto
+        owner
+      }
+    }
+  `;
 
   const [deleteProjects] = useMutation(deleteProject, {
-    refetchQueries: [{ query: getProjects }]
-  })
+    refetchQueries: [{ query: getProjects }],
+  });
 
   const DeleteProjects = async (id) => {
-
     var respuesta = window.confirm("¿Estas seguro que deseas eliminarlo?");
 
     if (respuesta == true) {
-      return true && await deleteProjects({ variables: { id } });
-    }
-    else {
+      return true && (await deleteProjects({ variables: { id } }));
+    } else {
       return false;
     }
-  }
-
-
-
+  };
 
   //crear
   var [index] = useState(0);
@@ -102,11 +113,29 @@ mutation createProject($nombre: String!, $objetivosGenerales: String!, $objetivo
   });
   const handleSubmit = (e) => {
     e.preventDefault();
-    //console.log(nombre, objetivosGenerales, objetivosEspecificos, fechaInicio, fechaTerminacion, presupuesto, owner)
-    presupuesto = parseFloat(presupuesto)
-    createProjects({ variables: { nombre, objetivosGenerales, objetivosEspecificos, 
-    fechaInicio, fechaTerminacion, presupuesto, owner } });
 
+    if (
+      rol.permisos.some(
+        (p) => p.accion === "createProjects"
+        )
+        ) {
+      presupuesto = parseFloat(presupuesto);
+      createProjects({
+        variables: {
+          nombre,
+          objetivosGenerales,
+          objetivosEspecificos,
+          fechaInicio,
+          fechaTerminacion,
+          presupuesto,
+          owner,
+        },
+      });
+    } else {
+      alert(
+        "no estas autorizado para realizar esta operacion"
+      );
+    }
 
     setNombre("");
     setObjetivosGenerales("");
@@ -115,7 +144,6 @@ mutation createProject($nombre: String!, $objetivosGenerales: String!, $objetivo
     setFechaTerminacion("");
     setPresupuesto(0);
     setOwner("");
-
   };
   function toggle(projects) {
     setId(projects._id);
@@ -134,6 +162,8 @@ mutation createProject($nombre: String!, $objetivosGenerales: String!, $objetivo
   //listar
   const { data, error, loading } = useQuery(getProjects);
   if (error) return <span style={{ color: "red" }}>{error}</span>;
+
+  const rol = JSON.parse(localStorage.getItem("rol"));
 
   return (
     <>
@@ -190,7 +220,7 @@ mutation createProject($nombre: String!, $objetivosGenerales: String!, $objetivo
               <button>Agregar Proyecto</button>
             </form>
           </Row>
-          <div >
+          <div>
             <Table>
               <thead>
                 <tr>
@@ -228,21 +258,53 @@ mutation createProject($nombre: String!, $objetivosGenerales: String!, $objetivo
                           <td>{projects.owner}</td>
                           <td>
                             <div className="btn-group">
-                              <Button color="warning" as={Link} to={routes.InscriptionPage} >
+                              <Button
+                                color="warning"
+                                as={Link}
+                                to={routes.InscriptionPage}
+                              >
                                 Inscribirme
                               </Button>
-                              <Button color="warning" as={Link} to={routes.avances} >
+                              <Button
+                                color="warning"
+                                as={Link}
+                                to={routes.avances}
+                              >
                                 Avances
                               </Button>
                               <Button
                                 color="primary"
-                                onClick={() => toggle(projects)}
+                                onClick={() => { 
+                                  if (
+                                    rol.permisos.some(
+                                      (p) => p.accion === "changeProject"
+                                    )
+                                  ) {
+                                    toggle(projects);
+                                  } else {
+                                    alert(
+                                      "no estas autorizado para realizar esta operacion"
+                                    );
+                                  }
+                                }}
                               >
                                 Editar
                               </Button>
                               <Button
                                 color="primary"
-                                onClick={() => DeleteProjects(projects._id)}
+                                onClick={() => {
+                                  if (
+                                    rol.permisos.some(
+                                      (p) => p.accion === "deleteProjects"
+                                    )
+                                  ) {
+                                    DeleteProjects(projects._id);
+                                  } else {
+                                    alert(
+                                      "no estas autorizado para realizar esta operacion"
+                                    );
+                                  }
+                                }}
                               >
                                 Borrar
                               </Button>
@@ -270,9 +332,7 @@ mutation createProject($nombre: String!, $objetivosGenerales: String!, $objetivo
         faseProyectoD={faseProyecto}
         presupuestoD={presupuesto}
         ownerD={owner}
-
       />
     </>
   );
 }
-
