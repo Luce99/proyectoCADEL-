@@ -9,14 +9,17 @@ export default function Navigation(){
     const {logout} = useAuth();
 
     return(
+        <div className="row">
+
+        <div className="col-12">
         <Navbar collapseOnSelect expand= "lg" variant = "dark" bg= "dark">
            <Navbar.Brand as= {NavLink} to = {routes.home}>Gestor de tareas</Navbar.Brand>
            <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
            <Navbar.Collapse id= "responsive-navbar-nav">
             <Nav className="me-auto" >
                 <Nav.Link as={NavLink} to ={routes.projects}>Proyectos</Nav.Link>
-                <Nav.Link as={NavLink} to ={routes.InscriptionPage}>Inscripciones
-               </Nav.Link>
+                <Nav.Link as={NavLink} to ={routes.InscriptionPage}>Inscripciones</Nav.Link>
+                <Nav.Link as={NavLink} to ={routes.avances}>Avances</Nav.Link>
                <NavDropdown title="Admin">
                <NavDropdown.Item as={NavLink} to ={routes.users.admin}>Usuarios</NavDropdown.Item>
                <NavDropdown.Item as={NavLink} to={routes.users.lider}>Lider</NavDropdown.Item>
@@ -31,5 +34,7 @@ export default function Navigation(){
            </Navbar.Collapse>
             <h1>Navigation</h1>
         </Navbar>
+        </div>
+        </div>
     )
 }

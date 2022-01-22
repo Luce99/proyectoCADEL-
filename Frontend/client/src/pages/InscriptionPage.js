@@ -60,7 +60,17 @@ export default function InscriptionPage() {
   })
 
   const deleteInscription = async (id) => {
-    await deleteInscripcion({variables:{id}})
+
+    var respuesta = window.confirm("¿Estas seguro que deseas eliminarlo?");
+
+    if (respuesta == true)
+    {
+        return true && await deleteInscripcion({variables:{id}});
+    }
+    else 
+    {
+        return false;
+    }
   } 
   //crear
   var [index] = useState(0);

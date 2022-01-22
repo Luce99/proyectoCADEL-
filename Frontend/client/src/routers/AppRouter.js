@@ -5,7 +5,6 @@ import UsersPage from '../pages/admin/UsersPage'
 import HomePage from '../pages/HomePage'
 import LoginPage from '../pages/LoginPage'
 import NotFoundPage from '../pages/NotFoundPage'
-import ProjectPage from '../pages/ProjectPage'
 import ProjectsPage from '../pages/ProjectsPage'
 import RegisterPage from '../pages/RegisterPage'
 import PrivateRoute from './PrivateRoute'
@@ -29,7 +28,6 @@ export default function AppRouter(){
               <PublicRoute exact path={routes.avances} component={AvancesPage} />
               <PublicRoute exact path={routes.projects} component={ProjectsPage} />
               <PublicRoute exact path={routes.InscriptionPage} component={InscriptionPage}/>
-              <PublicRoute exact path={routes.project()} component={ProjectPage} />
               <PublicRoute hasRole={roles.admin} exact path={routes.users.admin}  component={UsersPage} />
               <PublicRoute hasRole={roles.lider} exact path={routes.users.lider} component={LiderPage}/>
               <Route path ="*" component={NotFoundPage}/>

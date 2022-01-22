@@ -1,188 +1,278 @@
 import React, { useState } from "react";
-import {
-  Dialog,
-  TextField,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Paper,
-  TableContainer,
-} from "@material-ui/core";
-import "bootstrap/dist/css/bootstrap.min.css";
-import EditIcon from "@material-ui/icons/Edit";
-import { Button as Btn } from "@material-ui/core";
-import { Button } from "reactstrap";
-import {
-  ApolloProvider,
-  useQuery,
-  gql,
-} from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { Container, Row, Button, Table } from "react-bootstrap";
+import EditModalProjects from "./Modales/EditModalProjects";
+import useModal from "../hooks/useModal";
+import routes from "../helpers/routes";
+import { Link } from "react-router-dom";
 
 export default function ProjectsPage() {
-  const GetProjects = gql`
-    query {
-      getProjects {
-        _id
-        nombre
-        estadoProyecto
-        faseProyecto
-      }
-    }
+
+  //Modal
+  const [
+    isOpenEditModalProjects,
+    OpenEditModalProjects,
+    closeEditModalProjects,
+  ] = useModal();
+
+  const [id, setId] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [objetivosGenerales, setObjetivosGenerales] = useState("");
+  const [objetivosEspecificos, setObjetivosEspecificos] = useState("");
+  const [fechaInicio, setFechaInicio] = useState("");
+  const [fechaTerminacion, setFechaTerminacion] = useState("");
+  var   [presupuesto, setPresupuesto] = useState(0);
+  const [owner, setOwner] = useState("");
+  const [estadoProyecto, setEstadoProyecto] = useState("");
+  const [faseProyecto, setFaseProyecto] = useState("");
+
+  const getProjects = gql`
+    query getProjects {
+  getProjects {
+    _id
+    nombre
+    objetivosGenerales
+    objetivosEspecificos
+    fechaInicio
+    fechaTerminacion
+    estadoProyecto
+    faseProyecto
+    presupuesto
+    owner
+  }
+}
   `;
 
-  const [modalEdit, setModalEdit] = useState(false);
-  const [modalAdd, setModalAdd] = useState(false);
-  const [setPhase] = useState("");
-  const [setState] = useState("");
+  const createProject = gql`
+mutation createProject($nombre: String!, $objetivosGenerales: String!, $objetivosEspecificos: String!, $fechaInicio: DateTime!, $fechaTerminacion: DateTime!,  $presupuesto: Float!, $owner: ID!) {
+  createProject(nombre: $nombre, objetivosGenerales: $objetivosGenerales, objetivosEspecificos: $objetivosEspecificos, fechaInicio: $fechaInicio, fechaTerminacion: $fechaTerminacion, presupuesto: $presupuesto, owner: $owner) {
+    _id
+    nombre
+    objetivosGenerales
+    objetivosEspecificos
+    fechaInicio
+    fechaTerminacion
+    presupuesto
+    owner
+  }
+}`;
 
-  const { data, loading } = useQuery(GetProjects);
+  //eliminar
+  const deleteProject = gql`
+  mutation deleteProject($id: ID!) {
+  deleteProject(_id: $id) {
+    _id
+    nombre
+    objetivosGenerales
+    objetivosEspecificos
+    fechaInicio
+    fechaTerminacion
+    estadoProyecto
+    faseProyecto
+    presupuesto
+    owner
+  }
+}`
 
-  const closeModalEdit = () => {
-    setModalEdit(false);
+
+  const [deleteProjects] = useMutation(deleteProject, {
+    refetchQueries: [{ query: getProjects }]
+  })
+
+  const DeleteProjects = async (id) => {
+
+    var respuesta = window.confirm("¿Estas seguro que deseas eliminarlo?");
+
+    if (respuesta == true) {
+      return true && await deleteProjects({ variables: { id } });
+    }
+    else {
+      return false;
+    }
+  }
+
+
+
+
+  //crear
+  var [index] = useState(0);
+
+  const [createProjects] = useMutation(createProject, {
+    refetchQueries: [{ query: getProjects }],
+  });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    //console.log(nombre, objetivosGenerales, objetivosEspecificos, fechaInicio, fechaTerminacion, presupuesto, owner)
+    presupuesto = parseFloat(presupuesto)
+    createProjects({ variables: { nombre, objetivosGenerales, objetivosEspecificos, 
+    fechaInicio, fechaTerminacion, presupuesto, owner } });
+
+
+    setNombre("");
+    setObjetivosGenerales("");
+    setObjetivosEspecificos("");
+    setFechaInicio("");
+    setFechaTerminacion("");
+    setPresupuesto(0);
+    setOwner("");
+
   };
+  function toggle(projects) {
+    setId(projects._id);
+    setNombre(projects.nombre);
+    setObjetivosGenerales(projects.objetivosGenerales);
+    setObjetivosEspecificos(projects.objetivosEspecificos);
+    setFechaInicio(projects.fechaInicio);
+    setFechaTerminacion(projects.fechaTerminacion);
+    setPresupuesto(projects.presupuesto);
+    setEstadoProyecto(projects.estadoProyecto);
+    setFaseProyecto(projects.faseProyecto);
+    setOwner(projects.owner);
+    OpenEditModalProjects();
+  }
 
-  const openModalEdit = () => {
-    setModalEdit(true);
-  };
-
-  const closeModalAdd = () => {
-    setModalAdd(false);
-  };
-
-  const openModalAdd = () => {
-    setModalAdd(true);
-  };
+  //listar
+  const { data, error, loading } = useQuery(getProjects);
+  if (error) return <span style={{ color: "red" }}>{error}</span>;
 
   return (
     <>
-      <ApolloProvider>
-        <div className="main_container">
-          <h1>Projects Administration</h1>
-          <div style={{ height: 500, width: "100%" }} className="principal-box">
-            <Btn
-              startIcon={<EditIcon style={{ height: 15 }} />}
-              variant="contained"
-              color="secondary"
-              onClick={openModalEdit}
-              className="main-btn"
-              style={{ fontSize: 12, padding: 8 }}
-            >
-              Edit Projects
-            </Btn>
-            <Button color="success" onClick={openModalAdd} className="main-btn">
-              Add Projects
-            </Button>
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Project Name</TableCell>
-                    <TableCell>Phase</TableCell>
-                    <TableCell>State</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {loading ? (
-                    <TableRow></TableRow>
-                  ) : (
-                    <>
-                      {data &&
-                        data.getProjects.map((projects) => (
-                          <TableRow key={projects._id}>
-                            <TableCell>{projects.nombre}</TableCell>
-                            <TableCell>{projects.faseProyecto}</TableCell>
-                            <TableCell>{projects.estadoProyecto}</TableCell>
-                          </TableRow>
-                        ))}
-                    </>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-
-            <Dialog
-              open={modalEdit}
-              onClose={closeModalEdit}
-              className="main_modal"
-            >
-              <form className="main_modal">
-                <h1>Projects</h1>
-                <TextField
-                  className="text-field"
-                  label="State"
-                  variant="filled"
-                  required
-                  onChange={(e) => {
-                    setPhase(e.target.value);
-                  }}
-                />
-                <TextField
-                  className="text-field"
-                  label="Phase"
-                  variant="filled"
-                  required
-                  onChange={(e) => {
-                    setState(e.target.value);
-                  }}
-                />
-                <div>
-                  <Button color="primary" className="modal-btn">
-                    Accept
-                  </Button>
-                  <Button
-                    color="danger"
-                    onClick={closeModalEdit}
-                    className="modal-btn"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </Dialog>
-
-            <Dialog
-              open={modalAdd}
-              onClose={closeModalAdd}
-              className="main_modal"
-            >
-              <form>
-                <TextField
-                  className="text-field"
-                  label="Project Name"
-                  variant="filled"
-                  required
-                />
-                <TextField
-                  className="text-field"
-                  label="Phase"
-                  variant="filled"
-                  required
-                />
-                <TextField
-                  className="text-field"
-                  label="State"
-                  variant="filled"
-                  required
-                />
-                <div>
-                  <Button color="primary" className="modal-btn">
-                    Add Project
-                  </Button>
-                  <Button
-                    color="danger"
-                    onClick={closeModalAdd}
-                    className="modal-btn"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </Dialog>
+      <Container>
+        <div>
+          <Row>
+            <h1>Nuevo Proyecto</h1>
+            <form onSubmit={handleSubmit}>
+              <input
+                id={+true}
+                placeholder="Ingresa el nombre del proyecto"
+                value={nombre}
+                onChange={(evt) => setNombre(evt.target.value)}
+              />
+              <input
+                id={+true}
+                placeholder="Ingresa los objetivos generales"
+                value={objetivosGenerales}
+                onChange={(evt) => setObjetivosGenerales(evt.target.value)}
+              />
+              <input
+                id={+true}
+                placeholder="Ingresa los objetivos especificos"
+                value={objetivosEspecificos}
+                onChange={(evt) => setObjetivosEspecificos(evt.target.value)}
+              />
+              <input
+                id={+true}
+                type="date"
+                placeholder="Ingresa la fecha de inicio"
+                value={fechaInicio}
+                onChange={(evt) => setFechaInicio(evt.target.value)}
+              ></input>
+              <input
+                id={+true}
+                type="date"
+                placeholder="Ingresa la fecha de terminación"
+                value={fechaTerminacion}
+                onChange={(evt) => setFechaTerminacion(evt.target.value)}
+              ></input>
+              <input
+                id={+true}
+                type="number"
+                placeholder="Ingresa el presupuesto"
+                value={presupuesto}
+                onChange={(evt) => setPresupuesto(evt.target.value)}
+              />
+              <input
+                id={+true}
+                placeholder="Ingresa el id del dueño del proyecto"
+                value={owner}
+                onChange={(evt) => setOwner(evt.target.value)}
+              />
+              <button>Agregar Proyecto</button>
+            </form>
+          </Row>
+          <div >
+            <Table>
+              <thead>
+                <tr>
+                  <th>Index</th>
+                  <th>Id</th>
+                  <th>Nombre</th>
+                  <th>objetivosGenerales</th>
+                  <th>objetivosEspecificos</th>
+                  <th>Fecha inicio</th>
+                  <th>Fecha Terminación</th>
+                  <th>Presupuesto</th>
+                  <th>Estado Proyecto</th>
+                  <th>Fase Proyecto</th>
+                  <th>Dueño proyecto</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr></tr>
+                ) : (
+                  <>
+                    {data &&
+                      data.getProjects.map((projects) => (
+                        <tr key={projects._id}>
+                          <td>{(index = index + 1)}</td>
+                          <td>{projects._id}</td>
+                          <td>{projects.nombre}</td>
+                          <td>{projects.objetivosGenerales}</td>
+                          <td>{projects.objetivosEspecificos}</td>
+                          <td>{projects.fechaInicio}</td>
+                          <td>{projects.fechaTerminacion}</td>
+                          <td>{projects.presupuesto}</td>
+                          <td>{projects.estadoProyecto}</td>
+                          <td>{projects.faseProyecto}</td>
+                          <td>{projects.owner}</td>
+                          <td>
+                            <div className="btn-group">
+                              <Button color="warning" as={Link} to={routes.InscriptionPage} >
+                                Inscribirme
+                              </Button>
+                              <Button color="warning" as={Link} to={routes.avances} >
+                                Avances
+                              </Button>
+                              <Button
+                                color="primary"
+                                onClick={() => toggle(projects)}
+                              >
+                                Editar
+                              </Button>
+                              <Button
+                                color="primary"
+                                onClick={() => DeleteProjects(projects._id)}
+                              >
+                                Borrar
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </>
+                )}
+              </tbody>
+            </Table>
           </div>
         </div>
-      </ApolloProvider>
+      </Container>
+      <EditModalProjects
+        isOpen={isOpenEditModalProjects}
+        close={closeEditModalProjects}
+        id={id}
+        nombreD={nombre}
+        objetivosGeneralesD={objetivosGenerales}
+        objetivosEspecificosD={objetivosEspecificos}
+        fechaInicioD={fechaInicio}
+        fechaTerminacionD={fechaTerminacion}
+        estadoProyectoD={estadoProyecto}
+        faseProyectoD={faseProyecto}
+        presupuestoD={presupuesto}
+        ownerD={owner}
+
+      />
     </>
   );
 }
+
