@@ -165,6 +165,8 @@ export default function ProjectsPage() {
 
   const rol = JSON.parse(localStorage.getItem("rol"));
 
+  console.log("hola");
+  
   return (
     <>
       <Container>
