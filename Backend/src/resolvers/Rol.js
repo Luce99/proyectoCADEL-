@@ -1,4 +1,5 @@
-const rolService = require("../services/Avance");
+const rolService = require("../services/Rol");
+
 const rolResolvers = {
   Query: {
     getRoles: async (parent, args) => {

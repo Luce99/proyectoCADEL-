@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const project = require("./Project")
+const Rol = require("./Rol")
 
 const UserSchema = new Schema({
     nombre: {
@@ -19,10 +20,6 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    tipoUsuario:{
-        type: String,
-        required: true
-    },
     contrasena:{
         type: String,
         required: true
@@ -31,7 +28,10 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
-    role: { type: Schema.Types.ObjectId, ref: "Rol" },
+    Rol: { 
+        type: Schema.Types.ObjectId,
+        ref: "Rol" },
+    
     projects: [{
         type: Schema.Types.ObjectId,
         ref: "project"

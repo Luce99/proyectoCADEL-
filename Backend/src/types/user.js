@@ -9,12 +9,11 @@ type User{
     nombre: String!
     apellido: String!
     identificacion: String!
-    tipoUsuario: String!
     estado: String!
     correo: String!
     contrasena: String!
-    role: Rol
-    projects: [Project!]
+    Rol: Rol!
+    projects: [Project]
 }
 
 type Rol {
@@ -50,30 +49,32 @@ type Mutation {
         nombre: String!
         apellido: String!
         identificacion: String!
-        tipoUsuario: String!
         estado: String
         correo: String!
         contrasena: String!
-        role: ID!
+        Rol: ID!
         ): User
-    login(correo: String!, contrasena: String!): User
+
+    login(
+        correo: String!, 
+        contrasena: String!
+        ): User
+
     updateUser(
         _id: ID!
         nombre: String
         apellido: String
         identificacion: String
-        tipoUsuario: String
         estado: String
         correo: String
         contrasena: String
-        role: ID!
+        Rol: ID
         ): User
     deleteUser(
         _id: ID!
         nombre: String
         apellido: String
         identificacion: String
-        tipoUsuario: String
         estado: String
         correo: String
         contrasena: String

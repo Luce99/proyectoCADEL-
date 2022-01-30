@@ -13,11 +13,10 @@ createUser = async (args) => {
       nombre: args.nombre,
       apellido: args.apellido,
       identificacion: args.identificacion,
-      tipoUsuario: args.tipoUsuario,
       estado: "pendiente",
       correo: args.correo,
       contrasena: hashedPassword,
-      role: args.role
+      Rol: args.Rol
     });
     const user = await userInstance.save();
     return user;
@@ -27,7 +26,14 @@ createUser = async (args) => {
 };
 
 getUsers = async () => {
-  let user = await User.find({}).populate("projects");
+  let user = await User.find({}).populate("projects").populate({
+    path: "Rol",
+    model: "Rol",
+    populate: {
+      path: "permisos",
+      model: "permiso",
+    },
+  })
   return user;
 };
 
@@ -39,8 +45,8 @@ getUserById = async (userId) => {
 login = async ({ correo, contrasena }) => {
 
   let user = await User.findOne({ correo: correo }).populate({
-    path: "role",
-    model: "rol",
+    path: "Rol",
+    model: "Rol",
     populate: {
       path: "permisos",
       model: "permiso",

@@ -14,8 +14,8 @@ const server = new ApolloServer({
   resolvers: resolvers,
 });
 
-const Rol = require("../src/models/Role");
-const Permiso = require("../src/models/Permiso");
+const Rol = require("./models/Rol");
+const permiso = require("./models/permiso");
 
 function initial() {
   Rol.estimatedDocumentCount((err, count) => {
@@ -27,7 +27,7 @@ function initial() {
           console.log("error", err);
         }
 
-        let permisos = await Permiso.insertMany([
+        let permisos = await permiso.insertMany([
           {
             nombre: "Añadir Inscripcion a proyecto",
             accion: "CreateInscription",
@@ -56,7 +56,7 @@ function initial() {
           console.log("error", err);
         }
 
-        let permisos = await Permiso.insertMany([
+        let permisos = await permiso.insertMany([
           {
             nombre: "Crear proyecto",
             accion: "createProjects",
@@ -78,13 +78,13 @@ function initial() {
             rol: liderRol._id,
           },
           {
-            nombre: "Editar Estado Usuario",
-            accion: "editStateUser",
+            nombre: "Editar Estado Inscripcion",
+            accion: "editStateInscription",
             rol: liderRol._id,
           },
           {
-            nombre: "Editar Estado Inscripcion",
-            accion: "editStateInscription",
+            nombre: "Eliminar inscripcion",
+            accion: "eliminarInscription",
             rol: liderRol._id,
           },
         ]);
@@ -98,18 +98,66 @@ function initial() {
         console.log("added 'lider' to roles collection");
       });
 
+
       new Rol({
         nombre: "administrador",
-      }).save((err) => {
+      }).save(async(err, administradorRol) => {
         if (err) {
           console.log("error", err);
         }
+        let permisos = await permiso.insertMany([
+          {
+            nombre: "Crear proyecto",
+            accion: "createProjects",
+            rol: administradorRol._id,
+          },
+          {
+            nombre: "Editar proyecto",
+            accion: "changeProject",
+            rol: administradorRol._id,
+          },
+          {
+            nombre: "Borrar proyecto",
+            accion: "deleteProjects",
+            rol: administradorRol._id,
+          },
+          {
+            nombre: "Editar Estado Usuario",
+            accion: "editStateUser",
+            rol: administradorRol._id,
+          },
+          {
+            nombre: "Borrar Usuario",
+            accion: "deleteUser",
+            rol: administradorRol._id,
+          },
+          {
+            nombre: "Editar Observacion",
+            accion: "editObservation",
+            rol: administradorRol._id,
+          },
+          {
+            nombre: "Editar Estado Inscripcion",
+            accion: "editStateInscription",
+            rol: administradorRol._id,
+          },
+          {
+            nombre: "Eliminar inscripcion",
+            accion: "eliminarInscription",
+            rol: administradorRol._id,
+          },
+        ]);
 
+        await Rol.findByIdAndUpdate(administradorRol._id, {
+          $set: {
+              "permisos": permisos
+          }
+       })
         console.log("added 'administrador' to roles collection");
       });
 
-      //administrador can make anything only don`t edit or delete rol
-      //lider
+      //lider can make anything only don`t edit or delete rol
+      //administrador
       // 1. create projects
       // 2. edit projects
       // 3. delete projects

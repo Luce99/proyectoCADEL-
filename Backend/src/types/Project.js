@@ -10,10 +10,10 @@ type User{
     nombre: String!
     apellido: String!
     identificacion: String!
-    tipoUsuario: String!
     estado: String!
     correo: String!
     contrasena: String!
+    Rol: Rol!
     projects: [Project!]
 }
 type Avances {

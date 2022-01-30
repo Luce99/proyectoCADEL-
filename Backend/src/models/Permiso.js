@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const Rol = require("./Rol")
 
-const Permiso = mongoose.model("permiso", PermisoSchema = new Schema({
+const permisoSchema = new Schema({
     nombre: {
         type: String,
         required: true
@@ -14,6 +15,6 @@ const Permiso = mongoose.model("permiso", PermisoSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Rol"
     }
-}))
+})
 
-module.exports = Permiso
+module.exports = mongoose.model("permiso", permisoSchema);
