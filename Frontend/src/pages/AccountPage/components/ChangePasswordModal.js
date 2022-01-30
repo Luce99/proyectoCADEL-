@@ -1,22 +1,38 @@
-import React from 'react'
+import { gql,useMutation } from '@apollo/client';
+import React, { useState } from 'react'
 import { useEffect } from 'react';
 import {Modal, Form, Alert, Button} from 'react-bootstrap'
-import {useForm} from 'react-hook-form'
-import changePasswordResolver from '../../../validations/changePasswordResolver';
 
+export default function ChangePasswordModal({isOpen, close, id, contrasenaD}){
 
-export default function ChangePasswordModal({isOpen, close}){
-    const {register, handleSubmit, formState: {errors}, reset} = useForm({resolver: changePasswordResolver});
+    const [contrasena, setContrasena]= useState("")
 
-    const onSubmit = (formData) => {
-        alert("Contraseña actualizada exitosamente")
-    }
 
     useEffect(() =>{
-        if(!isOpen){
-            reset()
-        }
-    }, [isOpen, reset])
+        setContrasena(contrasenaD);
+    }, [contrasenaD])
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        changePassword({
+          variables: {
+            id: id,
+            contrasena: contrasena,
+          },
+        });
+        close();
+        window.location.reload()
+      };
+
+      const updateUser = gql`
+      mutation UpdateUser($id: ID!, $contrasena: String) {
+      updateUser(_id: $id, contrasena: $contrasena) {
+      _id
+      contrasena
+  }
+}`
+
+    const [changePassword] = useMutation(updateUser);
 
     return (
         <Modal show={isOpen} onHide={close}>
@@ -24,27 +40,23 @@ export default function ChangePasswordModal({isOpen, close}){
                 <Modal.Title>Cambiar contraseña</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form onSubmit={handleSubmit(onSubmit)}>
+                <Form onSubmit={handleSubmit}>
                     <Form.Group>
                         <Form.Label>Nueva contraseña</Form.Label>
                         <Form.Control 
                             placeholder="Escribe una nueva contraseña"
-                            {...register("password")}
                             type='password'
+                            name="contrasena"
+                            type="text"
+                            value={contrasena}
+                            onChange={(evt) => setContrasena(evt.target.value)}
                       />
-                       {errors.password &&(
-                       <Form.Text>
-                           <Alert variant="danger">
-                               {errors.password.message}
-                           </Alert>
-                       </Form.Text>
-                       )}
                     </Form.Group>
                 </Form> 
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={close}>Cancelar</Button>
-                <Button variant="primary" onClick= {handleSubmit(onSubmit)}>Actualizar contraseña</Button>
+                <Button variant="primary" onClick= {handleSubmit}>Actualizar contraseña</Button>
             </Modal.Footer>
         </Modal>
     )

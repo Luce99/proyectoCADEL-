@@ -164,6 +164,11 @@ export default function ProjectsPage() {
   if (error) return <span style={{ color: "red" }}>{error}</span>;
 
   const rol = JSON.parse(localStorage.getItem("Rol"));
+
+  var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
   
   return (
     <>
@@ -225,16 +230,13 @@ export default function ProjectsPage() {
               <thead>
                 <tr>
                   <th>Index</th>
-                  <th>Id</th>
                   <th>Nombre</th>
-                  <th>objetivosGenerales</th>
-                  <th>objetivosEspecificos</th>
+                  <th>objetivos</th>
                   <th>Fecha inicio</th>
                   <th>Fecha Terminación</th>
                   <th>Presupuesto</th>
                   <th>Estado Proyecto</th>
                   <th>Fase Proyecto</th>
-                  <th>Dueño proyecto</th>
                 </tr>
               </thead>
               <tbody>
@@ -246,16 +248,13 @@ export default function ProjectsPage() {
                       data.getProjects.map((projects) => (
                         <tr key={projects._id}>
                           <td>{(index = index + 1)}</td>
-                          <td>{projects._id}</td>
                           <td>{projects.nombre}</td>
-                          <td>{projects.objetivosGenerales}</td>
-                          <td>{projects.objetivosEspecificos}</td>
-                          <td>{projects.fechaInicio}</td>
-                          <td>{projects.fechaTerminacion}</td>
-                          <td>{projects.presupuesto}</td>
+                          <td>{projects.objetivosGenerales} <br></br> {projects.objetivosEspecificos}</td>
+                          <td>{new Date(projects.fechaInicio).toLocaleString().split(",")[0]}</td>
+                          <td>{new Date(projects.fechaTerminacion).toLocaleString().split(",")[0]}</td>
+                          <td>{formatter.format(projects.presupuesto)}</td>
                           <td>{projects.estadoProyecto}</td>
                           <td>{projects.faseProyecto}</td>
-                          <td>{projects.owner}</td>
                           <td>
                             <div className="btn-group">
                               <Button

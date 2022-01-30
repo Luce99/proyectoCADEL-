@@ -19,6 +19,7 @@ export default function AccountPage() {
   const [identificacion, setIdentificacion] = useState("");
   const [estado, setEstado] = useState("");
   const [correo, setCorreo] = useState("");
+  const [contrasena, setContrasena] = useState("");
   const id = localStorage.getItem("id");
 
   const getUserById = gql`
@@ -116,10 +117,15 @@ export default function AccountPage() {
           </Col>
         </Row>
       </Container>
-      <DeleteModal isOpen={isOpenDeleteModal} close={closeDeleteModal} />
+      <DeleteModal 
+      isOpen={isOpenDeleteModal} 
+      close={closeDeleteModal}
+      id={id} />
       <ChangePasswordModal
         isOpen={isOpenChangePasswordModal}
         close={closeChangePasswordModal}
+        id= {id}
+        contrasenaD={contrasena}
       />
       <EditModal isOpen={isOpenEditModal} close={closeEditModal}
       id={id}

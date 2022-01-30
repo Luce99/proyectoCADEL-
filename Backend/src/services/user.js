@@ -18,7 +18,15 @@ createUser = async (args) => {
       contrasena: hashedPassword,
       Rol: args.Rol
     });
-    const user = await userInstance.save();
+    const userSaved = await userInstance.save();
+    let user = await User.findById(userSaved._id).populate("projects").populate({
+      path: "Rol",
+      model: "Rol",
+      populate: {
+        path: "permisos",
+        model: "permiso",
+      },
+    })
     return user;
   } catch (err) {
     throw err;

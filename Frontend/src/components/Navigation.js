@@ -14,6 +14,7 @@ export default function Navigation() {
   localStorage.removeItem("isLogged")
   localStorage.removeItem("nombre")
   localStorage.removeItem("Rol")
+  localStorage.removeItem("id")
   history.push ('/')
   window.location.reload()
  }
@@ -70,7 +71,6 @@ export default function Navigation() {
               )}
             </Nav>
           </Navbar.Collapse>
-          <h1>Navigation</h1>
         </Navbar>
       </div>
     </div>

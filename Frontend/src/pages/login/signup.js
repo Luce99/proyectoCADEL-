@@ -32,25 +32,39 @@ export default function Signup() {
         Rol: $Rol
       ) {
         _id
+        nombre
+        apellido
+        Rol {
+          nombre
+          permisos {
+            nombre
+            accion
+          }
+        }
       }
     }
   `;
 
   const [CreateUser] = useMutation(createUser);
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
-   const {data, error} = CreateUser({
-
+   var {data, error} = await CreateUser({
       variables: { nombre, apellido, identificacion, correo, contrasena, Rol },
     });
 
-    if (error){
-        console.log("Error al registrar")
-    }
-    else {
+    if (data){
+      console.log(data)
+      localStorage.setItem("isLogged", true);
+      localStorage.setItem("Rol", JSON.stringify(data.createUser.Rol));
+      localStorage.setItem("nombre", data.createUser.nombre + data.createUser.apellido);
+      localStorage.setItem("id", data.createUser._id);
          history.push ('/projects')
          window.location.reload()
+        
+    }
+    else {
+      console.log("Error al registrar")
     }
     setNombre("");
     setApellido("");

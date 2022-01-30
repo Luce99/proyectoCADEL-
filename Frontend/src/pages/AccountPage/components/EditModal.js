@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Form, Alert, Button } from "react-bootstrap";
-import { useForm } from "react-hook-form";
 import { useEffect } from "react";
-import editAccountResolver from "../../../validations/editAccountResolver";
 import { gql, useQuery, useMutation } from "@apollo/client";
 
 export default function EditModal({
@@ -22,11 +20,6 @@ export default function EditModal({
   const [estado, setEstado] = useState("");
   const [correo, setCorreo] = useState("");
   const [Rol, setRol] = useState("");
-  const {
-    formState: { errors, dirtyFields },
-    reset,
-  } = useForm({ resolver: editAccountResolver });
-  const isDirty = !!Object.keys(dirtyFields).length;
 
   useEffect(() => {
     setNombre(nombreD);
@@ -98,11 +91,6 @@ export default function EditModal({
                 placeholder="Escribe un nombre"
                 onChange={(evt) => setNombre(evt.target.value)}
               />
-              {errors.nombre && (
-                <Form.Text>
-                  <Alert variant="danger">{errors.nombre.message}</Alert>
-                </Form.Text>
-              )}
             </Form.Group>
             <Form.Group>
               <Form.Label>Apellido</Form.Label>
@@ -113,11 +101,6 @@ export default function EditModal({
                 value={apellido}
                 onChange={(evt) => setApellido(evt.target.value)}
               />
-              {errors.apellido && (
-                <Form.Text>
-                  <Alert variant="danger">{errors.apellido.message}</Alert>
-                </Form.Text>
-              )}
             </Form.Group>
             <Form.Group>
               <Form.Label>Identificacion</Form.Label>
@@ -128,13 +111,6 @@ export default function EditModal({
                 value={identificacion}
                 onChange={(evt) => setIdentificacion(evt.target.value)}
               />
-              {errors.identificacion && (
-                <Form.Text>
-                  <Alert variant="danger">
-                    {errors.identificacion.message}
-                  </Alert>
-                </Form.Text>
-              )}
             </Form.Group>
             <Form.Group>
               <Form.Label>Correo</Form.Label>
@@ -145,11 +121,6 @@ export default function EditModal({
                 value={correo}
                 onChange={(evt) => setCorreo(evt.target.value)}
               />
-              {errors.correo && (
-                <Form.Text>
-                  <Alert variant="danger">{errors.correo.message}</Alert>
-                </Form.Text>
-              )}
             </Form.Group>
           </Form>
         </Modal.Body>

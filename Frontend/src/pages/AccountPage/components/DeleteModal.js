@@ -1,13 +1,48 @@
 import React from 'react'
 import {Modal, Alert, Button} from 'react-bootstrap'
+import {gql, useMutation} from "@apollo/client"
+import history from '../../../history'
 
 export default function DeleteModal({isOpen, close}){
     
-    //const {logout} = useAuth()
+    const id = localStorage.getItem("id")
 
-    const handleDelete = () => {
-        //logout()
+    function logout(){
+        localStorage.removeItem("isLogged")
+        localStorage.removeItem("nombre")
+        localStorage.removeItem("Rol")
+        localStorage.removeItem("id")
+        history.push ('/')
+        window.location.reload()
+       }
+
+    const deleteUser = gql `
+    mutation deleteUser($id: ID!) {
+    deleteUser(_id: $id) {
+    nombre
+    apellido
+    identificacion
+    estado
+    correo
+  }
+}`
+    const [deleteUsers] = useMutation(deleteUser)
+
+    const DeleteUser = async (id) => {
+        var respuesta = window.confirm("¿Estas seguro que deseas eliminarlo?");
+
+    if (respuesta == true) {
+      return true && (await deleteUsers({ variables: { id } }));
+    } else {
+      return false;
     }
+  };
+
+    const handleDelete = async() => {
+        var result = await DeleteUser(id)
+        if (result){
+        logout()
+    }}
 
     return (
         <Modal show={isOpen} onHide={close}>
