@@ -121,7 +121,7 @@ export default function AvancesPage() {
   const { data, error, loading } = useQuery(getAvances);
   if (error) return <span style={{ color: "red" }}>{error}</span>;
 
-  const rol = JSON.parse(localStorage.getItem("rol"));
+  const rol = JSON.parse(localStorage.getItem("Rol"));
   return (
     <>
       <Container>

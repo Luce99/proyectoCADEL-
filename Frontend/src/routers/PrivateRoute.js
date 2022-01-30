@@ -1,14 +1,13 @@
 import React from 'react'
 import { Redirect, Route, useLocation } from "react-router-dom";
-import useAuth from "../auth/useAuth";
 import routes from "../helpers/routes";
 
 export default function PrivateRoute({ hasRole: role, ...rest }) {
   const location = useLocation();
 
-  const { hasRole, isLogged } = useAuth();
+  const { isLogged } = localStorage.getItem("isLogged")
 
-  if (role && !hasRole(role)) return <Redirect to={routes.home} />;
+  //if (role && !hasRole(role)) return <Redirect to={routes.home} />;
 
   if (!isLogged())
     return (

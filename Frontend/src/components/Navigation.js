@@ -1,10 +1,22 @@
 import React from "react";
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown, Button } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import routes from "../helpers/routes";
+import history from "../history";
 
 export default function Navigation() {
   const isLogged = localStorage.getItem("isLogged");
+  const style = {
+    cursor: "pointer"
+  }
+
+ function logout(){
+  localStorage.removeItem("isLogged")
+  localStorage.removeItem("nombre")
+  localStorage.removeItem("Rol")
+  history.push ('/')
+  window.location.reload()
+ }
 
   return (
     <div className="row">
@@ -39,16 +51,11 @@ export default function Navigation() {
                 </Nav.Link>
               ) : (
                 <div>
-                  <Nav.Link
-                    to={routes.account}
-                    onClick={
-                      (localStorage.removeItem("isLogged"),
-                      localStorage.removeItem("nombre"),
-                      localStorage.removeItem("Rol"))
-                    }
+                  <a className="nav-link" style={style}
+                    onClick={ logout}
                   >
                     Cerrar sesión
-                  </Nav.Link>
+                  </a>
                 </div>
               )}
 

@@ -38,7 +38,14 @@ getUsers = async () => {
 };
 
 getUserById = async (userId) => {
-  let user = await User.findById(userId).populate("projects");
+  let user = await User.findById(userId).populate("projects").populate({
+    path: "Rol",
+    model: "Rol",
+    populate: {
+      path: "permisos",
+      model: "permiso",
+    },
+  });
   return user;
 };
 

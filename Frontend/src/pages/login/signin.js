@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 import { Card, Button, Form } from "react-bootstrap";
 import routes from "../../helpers/routes";
 import { Link } from "react-router-dom";
 import { gql, useMutation } from "@apollo/client";
+import history from "../../history"
 
 export default function ({ handleClick }) {
   const [correo, setCorreo] = useState();
   const [contrasena, setContrasena] = useState();
-  const [redirect, setRedirect] = useState(false);
 
   const login = gql`
     mutation login($correo: String!, $contrasena: String!) {
@@ -47,9 +46,12 @@ export default function ({ handleClick }) {
       localStorage.setItem("isLogged", true);
       localStorage.setItem("Rol", JSON.stringify(data.login.Rol));
       localStorage.setItem("nombre", data.login.nombre + data.login.apellido);
+      localStorage.setItem("id", data.login._id);
       setCorreo("");
       setContrasena("");
-      setRedirect(true);
+      history.push ('/projects')
+      window.location.reload()
+      
     } else {
       alert(error);
     }
@@ -57,7 +59,7 @@ export default function ({ handleClick }) {
 
   return (
     <div>
-      {redirect ? <Redirect to="/" /> : null}
+      
       <Card style={{ width: "18rem" }}>
         <Card.Header>
           {" "}

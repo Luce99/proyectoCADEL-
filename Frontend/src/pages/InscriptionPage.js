@@ -111,7 +111,7 @@ export default function InscriptionPage() {
   const { data, error, loading } = useQuery(GetInscriptions);
   if (error) return <span style={{ color: "red" }}>{error}</span>;
 
-  const rol = JSON.parse(localStorage.getItem("rol"));
+  const rol = JSON.parse(localStorage.getItem("Rol"));
   
   return (
     <>
