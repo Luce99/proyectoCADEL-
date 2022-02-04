@@ -237,6 +237,7 @@ export default function ProjectsPage() {
                   <th>Presupuesto</th>
                   <th>Estado Proyecto</th>
                   <th>Fase Proyecto</th>
+                  <th>Funciones</th>
                 </tr>
               </thead>
               <tbody>

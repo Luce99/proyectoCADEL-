@@ -75,8 +75,8 @@ export default function Signup() {
   };
   return (
     <div>
-      <Card style={{ width: "20rem" }}>
-        <Card.Header>
+      <Card style={{ width: "25rem" }}>
+        <Card.Header >
           {" "}
           <h4>Proyecto CADEL - Registro</h4>
         </Card.Header>
@@ -161,6 +161,7 @@ export default function Signup() {
         <Card.Footer>
           <p className="registro text-center">
             ¿Tienes cuenta?
+            <br></br>
             <Button as={Link} to={routes.login} className="ml-1">
               {" "}
               inicia sesión{" "}

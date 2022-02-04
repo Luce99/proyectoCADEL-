@@ -8,12 +8,13 @@ export default function HomePage(){
      <Container>
          <Row className= "mt-5">
              <Col xs ={{span:12}}  className="mb-5">
-             <h2> Bienvenid@ al gestor de tareas</h2>
-             <p>Aquí podrás gestionar tus proyectos</p>
+             <h1> Bienvenid@ al gestor de tareas</h1>
+             <br></br>
+             <p>Aquí podrás gestionar tus proyectos.</p>
              <p>
-                 lista los proyectos, inscribete a un proyecto, agrega un avance.
+                 Lista los proyectos, inscribete a un proyecto, agrega un avance.
              </p>
-             <div>
+             <div className='link'>
                  <Link to= {routes.login}> Ingresa </Link> o <Button as={Link} to={routes.register} className ="ml-1"> registrate </Button>
              </div>
              </Col>

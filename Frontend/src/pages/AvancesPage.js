@@ -162,6 +162,7 @@ export default function AvancesPage() {
                 <th>Observaciones lider</th>
                 <th>Estudiante</th>
                 <th>Proyectos</th>
+                <th>Funciones</th>
               </tr>
             </thead>
             <tbody>
@@ -174,7 +175,7 @@ export default function AvancesPage() {
                       <tr key={avances._id}>
                         <td>{(index = index + 1)}</td>
                         <td>{avances._id}</td>
-                        <td>{avances.fechaAvance}</td>
+                        <td>{new Date(avances.fechaAvance).toLocaleString().split(",")[0]}</td>
                         <td>{avances.descripcion}</td>
                         <td>{avances.observacionesLider}</td>
                         <td>{avances.estudiante}</td>

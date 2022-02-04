@@ -135,7 +135,7 @@ export default function InscriptionPage() {
               <Button variant="success" type="submit"> Enviar</Button>
             </form>
           </Row>
-          <Table>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <thead>
               <tr>
                 <th>Index</th>
@@ -145,6 +145,7 @@ export default function InscriptionPage() {
                 <th>Fecha egreso</th>
                 <th>Estudiante</th>
                 <th>Proyectos</th>
+                <th>Funciones</th>
               </tr>
             </thead>
             <tbody>
@@ -158,8 +159,8 @@ export default function InscriptionPage() {
                         <td>{(index = index + 1)}</td>
                         <td>{inscription._id}</td>
                         <td>{inscription.estadoInscripcion}</td>
-                        <td>{inscription.fechaIngreso}</td>
-                        <td>{inscription.fechaEgreso}</td>
+                        <td>{new Date(inscription.fechaIngreso).toLocaleString().split(",")[0]}</td>
+                        <td>{new Date(inscription.fechaEgreso).toLocaleString().split(",")[0]}</td>
                         <td>{inscription.estudiante}</td>
                         <td>{inscription.projects}</td>
                         <td>
