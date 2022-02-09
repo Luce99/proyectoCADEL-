@@ -58,8 +58,7 @@ export default function ({ handleClick }) {
   };
 
   return (
-    <div>
-      
+    <div className="contenedor">
       <Card style={{ width: "18rem" }}>
         <Card.Header>
           {" "}

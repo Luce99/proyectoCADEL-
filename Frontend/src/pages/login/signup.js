@@ -74,7 +74,7 @@ export default function Signup() {
     setRol("");
   };
   return (
-    <div>
+    <div className="contenedor">
       <Card style={{ width: "25rem" }}>
         <Card.Header >
           {" "}
@@ -169,6 +169,6 @@ export default function Signup() {
           </p>
         </Card.Footer>
       </Card>
-    </div>
+      </div>
   );
 }

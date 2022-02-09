@@ -20,9 +20,8 @@ export default function Navigation() {
  }
 
   return (
-    <div className="row">
-      <div className="col-12">
-        <Navbar collapseOnSelect expand="lg" variant="dark" bg="dark">
+      <div>
+        <Navbar collapseOnSelect expand="lg" className="Nav" variant="dark">
           <Navbar.Brand as={NavLink} to={routes.home}>
             Gestor de tareas
           </Navbar.Brand>
@@ -73,6 +72,5 @@ export default function Navigation() {
           </Navbar.Collapse>
         </Navbar>
       </div>
-    </div>
   );
 }
