@@ -86,6 +86,7 @@ const DeleteUser = async (id) =>{
   const { data, loading } = useQuery(GetUsuario);
   // if (error) return <span style={{color: 'red'}}>{error}</span>
   const rol = JSON.parse(localStorage.getItem("Rol"));
+  const status = localStorage.getItem("estado");
 
   return (
     <>
@@ -123,6 +124,7 @@ const DeleteUser = async (id) =>{
           color="primary"
           style={{ fontSize: 12}}
           onClick={()=> { 
+            if (status === "Autorizado"){
             if (
               rol.permisos.some(
                 (p) => p.accion === "editStateUser"
@@ -131,7 +133,10 @@ const DeleteUser = async (id) =>{
               alert(
                 "no estas autorizado para realizar esta operacion"
               );
-            }}}
+            }}else {
+              alert(
+                "no estas autorizado para realizar esta operacion"
+              )}}}
         >
           Editar usuario
         </Button>
@@ -139,12 +144,16 @@ const DeleteUser = async (id) =>{
           variant="contained"
           color="secondary"
           onClick={() => {
+            if (status === "Autorizado"){
           if (
           rol.permisos.some(
           (p) => p.accion === "deleteUser"))
           {DeleteUser(users._id)} else {
           alert(
-          "no estas autorizado para realizar esta operacion");}}}>
+          "no estas autorizado para realizar esta operacion");}}else {
+            alert(
+              "no estas autorizado para realizar esta operacion"
+            )}}}>
           Borrar
           </Button>
         </TableCell>

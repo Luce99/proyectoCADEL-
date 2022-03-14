@@ -80,7 +80,7 @@ export default function InscriptionPage() {
   });
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+    if (estado === "Autorizado"){
     if (
       rol.permisos.some(
         (p) => p.accion === "CreateInscription"
@@ -88,6 +88,10 @@ export default function InscriptionPage() {
         ) {
     createInscripcion({ variables: { estudiante, projects } });
   } else {
+    alert(
+      "no estas autorizado para realizar esta operacion"
+    );
+  }}else {
     alert(
       "no estas autorizado para realizar esta operacion"
     );
@@ -112,6 +116,7 @@ export default function InscriptionPage() {
   if (error) return <span style={{ color: "red" }}>{error}</span>;
 
   const rol = JSON.parse(localStorage.getItem("Rol"));
+  const estado = (localStorage.getItem("estado"));
   
   return (
     <>
@@ -167,6 +172,7 @@ export default function InscriptionPage() {
                           <Button
                             color="primary"
                             onClick={() => { 
+                              if (estado === "Autorizado"){
                               if (
                                 rol.permisos.some(
                                   (p) => p.accion === "editStateInscription"
@@ -175,18 +181,27 @@ export default function InscriptionPage() {
                                 alert(
                                   "no estas autorizado para realizar esta operacion"
                                 );
-                              }}}
+                              }}else {
+                                alert(
+                                  "no estas autorizado para realizar esta operacion"
+                                );
+                              } }}
                           >
                             Editar
                           </Button>
                           <Button
                             variant="danger"
                             onClick={() => {
+                              if (estado === "Autorizado"){
                               if (
                                 rol.permisos.some(
                                   (p) => p.accion === "eliminarInscription"
                                 )
                               ) {deleteInscription(inscription._id)} else {
+                                alert(
+                                  "no estas autorizado para realizar esta operacion"
+                                );
+                              }}else {
                                 alert(
                                   "no estas autorizado para realizar esta operacion"
                                 );

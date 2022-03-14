@@ -12,6 +12,7 @@ export default function Signup() {
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
   const [Rol, setRol] = useState("");
+  const [estado, setStatus] = useState("");
 
   //crear
   const createUser = gql`
@@ -19,6 +20,7 @@ export default function Signup() {
       $nombre: String!
       $apellido: String!
       $identificacion: String!
+      $estado: String
       $correo: String!
       $contrasena: String!
       $Rol: ID!
@@ -27,6 +29,7 @@ export default function Signup() {
         nombre: $nombre
         apellido: $apellido
         identificacion: $identificacion
+        estado: $estado
         correo: $correo
         contrasena: $contrasena
         Rol: $Rol
@@ -50,7 +53,7 @@ export default function Signup() {
     e.preventDefault();
 
    var {data, error} = await CreateUser({
-      variables: { nombre, apellido, identificacion, correo, contrasena, Rol },
+      variables: { nombre, apellido, identificacion, estado, correo, contrasena, Rol },
     });
 
     if (data){
@@ -59,6 +62,7 @@ export default function Signup() {
       localStorage.setItem("Rol", JSON.stringify(data.createUser.Rol));
       localStorage.setItem("nombre", data.createUser.nombre + data.createUser.apellido);
       localStorage.setItem("id", data.createUser._id);
+      localStorage.setItem("estado", data.createUser.estado);
          history.push ('/projects')
          window.location.reload()
         
@@ -69,6 +73,7 @@ export default function Signup() {
     setNombre("");
     setApellido("");
     setIdentificacion("");
+    setStatus("");
     setCorreo("");
     setContrasena("");
     setRol("");
@@ -135,9 +140,10 @@ export default function Signup() {
             <Form.Group className="mb-3" controlId="formBasicEstado">
               <Form.Label>Estado</Form.Label>
               <Form.Control
-                required
+                readOnly
                 type="text"
-                placeholder="Estado"
+                placeholder="Pendiente"
+                value={estado}
                 defaultValue="Pendiente"
               />
             </Form.Group>

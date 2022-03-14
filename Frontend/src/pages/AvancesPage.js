@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { gql, useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { Container, Row, Button, Table } from "react-bootstrap";
 import EditModalAvances from "./Modales/EditModalAvances";
 import useModal from "../hooks/useModal";
@@ -86,26 +86,28 @@ export default function AvancesPage() {
   });
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (
-      rol.permisos.some(
-        (p) => p.accion === "goToAdvances"
-        )
-        ) {
-    CreateAvances({ variables: {
-       descripcion,
-       estudiante,
-       projects } });
-      } else {
-        alert(
-          "no estas autorizado para realizar esta operacion"
-        );
-      }
-    setDescripcion("");
-    setEstudiante("");
-    setProjects("");
 
-    window.close();
+    if (estado === "Autorizado") {
+      if (rol.permisos.some((p) => p.accion === "goToAdvances")) {
+        CreateAvances({
+          variables: {
+            descripcion,
+            estudiante,
+            projects,
+          },
+        });
+      } else {
+        alert("no estas autorizado para realizar esta operacion");
+      }
+      setDescripcion("");
+      setEstudiante("");
+      setProjects("");
+
+      window.close();
+    }else {
+      alert(
+        "no estas autorizado para realizar esta operacion"
+      )}
   };
   function toggle(avances) {
     setId(avances._id);
@@ -122,6 +124,7 @@ export default function AvancesPage() {
   if (error) return <span style={{ color: "red" }}>{error}</span>;
 
   const rol = JSON.parse(localStorage.getItem("Rol"));
+  const estado = (localStorage.getItem("estado"));
   return (
     <>
       <Container>
@@ -175,7 +178,13 @@ export default function AvancesPage() {
                       <tr key={avances._id}>
                         <td>{(index = index + 1)}</td>
                         <td>{avances._id}</td>
-                        <td>{new Date(avances.fechaAvance).toLocaleString().split(",")[0]}</td>
+                        <td>
+                          {
+                            new Date(avances.fechaAvance)
+                              .toLocaleString()
+                              .split(",")[0]
+                          }
+                        </td>
                         <td>{avances.descripcion}</td>
                         <td>{avances.observacionesLider}</td>
                         <td>{avances.estudiante}</td>
@@ -183,31 +192,47 @@ export default function AvancesPage() {
                         <td>
                           <Button
                             color="primary"
-                            onClick={() => { 
+                            onClick={() => {
+                              if (estado === "Autorizado") {
                               if (
                                 rol.permisos.some(
-                                  (p) => p.accion === "goToAdvances" || "editObservation"
+                                  (p) =>
+                                    p.accion === "goToAdvances" ||
+                                    "editObservation"
                                 )
-                              ) { toggle(avances)} else {
+                              ) {
+                                toggle(avances);
+                              } else {
                                 alert(
                                   "no estas autorizado para realizar esta operacion"
                                 );
-                              }}}
+                              }
+                            }else {
+                              alert(
+                                "no estas autorizado para realizar esta operacion"
+                              )}}}
                           >
                             Editar
                           </Button>
                           <Button
                             variant="danger"
                             onClick={() => {
+                              if (estado === "Autorizado") {
                               if (
                                 rol.permisos.some(
                                   (p) => p.accion === "goToAdvances"
                                 )
-                              ) {DeleteAvances(avances._id)}else {
+                              ) {
+                                DeleteAvances(avances._id);
+                              } else {
                                 alert(
                                   "no estas autorizado para realizar esta operacion"
                                 );
-                              }}}
+                              }
+                            }else {
+                              alert(
+                                "no estas autorizado para realizar esta operacion"
+                              )} }}
                           >
                             Borrar
                           </Button>

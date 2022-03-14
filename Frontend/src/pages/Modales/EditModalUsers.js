@@ -56,18 +56,18 @@ return (
                 value={id}
               ></FormControl>
             </FormGroup>
-
-              <FormGroup>
-                <label>Estado:</label>
-                <FormControl
-              id={+true}
+                <Form.Label>Estado:</Form.Label>
+                <select
               className="form-control"
+              id="sel1"
               name="estado"
-              type="text"
               value={estado}
               onChange={(evt) => setStatus(evt.target.value)}>
-              </FormControl>
-            </FormGroup>
+                <option value={"Pendiente"}>Pendiente</option>
+                <option value={"No autorizado"}>No autorizado</option>
+                <option value={"Autorizado"}>Autorizado</option>
+              </select>
+            
             </Form>
             </ModalBody>
             <Modal.Footer>

@@ -156,13 +156,13 @@ function initial() {
         console.log("added 'administrador' to roles collection");
       });
 
-      //lider can make anything only don`t edit or delete rol
+      //lider can make almost evreything only don`t edit or delete rol, and don't CRUD advances 
       //administrador
       // 1. create projects
       // 2. edit projects
       // 3. delete projects
       // 4. observations
-      // 5. state of the user (pending)
+      // 5. state of the user 
       // 6. edit the user data
       // 7. the incription is pending when a user create that
 
@@ -170,7 +170,7 @@ function initial() {
       //1. list project(only can see the projects)
       //2. add inscription to project
       //3. CRUD advances
-      //4. edit user information
+      //4. edit itself information
     }
   });
 }

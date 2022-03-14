@@ -15,6 +15,7 @@ export default function Navigation() {
   localStorage.removeItem("nombre")
   localStorage.removeItem("Rol")
   localStorage.removeItem("id")
+  localStorage.removeItem("estado")
   history.push ('/')
   window.location.reload()
  }
@@ -36,7 +37,7 @@ export default function Navigation() {
                   Avances
                 </Nav.Link>
                 <NavDropdown title="Admin">
-                  <NavDropdown.Item as={NavLink} to={routes.users.admin}>
+                  <NavDropdown.Item as={NavLink}to={routes.users.admin}>
                     Usuarios
                   </NavDropdown.Item>
                 </NavDropdown>

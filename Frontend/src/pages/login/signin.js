@@ -47,9 +47,10 @@ export default function ({ handleClick }) {
       localStorage.setItem("Rol", JSON.stringify(data.login.Rol));
       localStorage.setItem("nombre", data.login.nombre + data.login.apellido);
       localStorage.setItem("id", data.login._id);
+      localStorage.setItem("estado", data.login.estado);
       setCorreo("");
       setContrasena("");
-      history.push ('/projects')
+      history.push ('/')
       window.location.reload()
       
     } else {

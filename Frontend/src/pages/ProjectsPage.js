@@ -113,7 +113,7 @@ export default function ProjectsPage() {
   });
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+    if (estado == "Autorizado"){
     if (
       rol.permisos.some(
         (p) => p.accion === "createProjects"
@@ -135,7 +135,10 @@ export default function ProjectsPage() {
     alert(
       "no estas autorizado para realizar esta operacion"
     );
-  }
+  }} else {
+    alert(
+      "no estas autorizado para realizar esta operacion"
+    );}
     setNombre("");
     setObjetivosGenerales("");
     setObjetivosEspecificos("");
@@ -164,6 +167,7 @@ export default function ProjectsPage() {
   if (error) return <span style={{ color: "red" }}>{error}</span>;
 
   const rol = JSON.parse(localStorage.getItem("Rol"));
+  const estado = (localStorage.getItem("estado"));
 
   var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -275,6 +279,7 @@ export default function ProjectsPage() {
                               <Button
                                 variant="success"
                                 onClick={() => { 
+                                  if (estado === "Autorizado") {
                                   if (
                                     rol.permisos.some(
                                       (p) => p.accion === "changeProject"
@@ -283,13 +288,17 @@ export default function ProjectsPage() {
                                     alert(
                                       "no estas autorizado para realizar esta operacion"
                                     );
-                                  }}}
+                                  }}else {
+                                    alert(
+                                      "no estas autorizado para realizar esta operacion"
+                                    )} }}
                               >
                                 Editar
                               </Button>
                               <Button
                                 variant="danger"
                                 onClick={() => {
+                                  if (estado === "Autorizado") {
                                   if (
                                     rol.permisos.some(
                                       (p) => p.accion === "deleteProjects"
@@ -298,7 +307,10 @@ export default function ProjectsPage() {
                                     alert(
                                       "no estas autorizado para realizar esta operacion"
                                     );
-                                  }}}
+                                  }}else {
+                                    alert(
+                                      "no estas autorizado para realizar esta operacion"
+                                    )} }}
                               >
                                 Borrar
                               </Button>
