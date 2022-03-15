@@ -54,7 +54,7 @@ export default function ({ handleClick }) {
       window.location.reload()
       
     } else {
-      alert(error);
+       alert("error");
     }
   };
 

@@ -7,8 +7,6 @@ import LoginPage from '../pages/LoginPage'
 import NotFoundPage from '../pages/NotFoundPage'
 import ProjectsPage from '../pages/ProjectsPage'
 import RegisterPage from '../pages/RegisterPage'
-import PrivateRoute from './PrivateRoute'
-import PublicRoute from './PublicRoute'
 import roles from '../helpers/roles'
 import routes from '../helpers/routes'
 import InscriptionPage from '../pages/InscriptionPage'
@@ -18,16 +16,16 @@ import AvancesPage from '../pages/AvancesPage'
 export default function AppRouter(){
     return (
               <Switch>
-              <PublicRoute exact path= {routes.home} component={HomePage}/>
-              <PublicRoute exact path={routes.login} component={LoginPage}/>
-              <PublicRoute exact path={routes.register} component={RegisterPage}/>
+              <Route exact path= {routes.home} component={HomePage}/>
+              <Route exact path={routes.login} component={LoginPage}/>
+              <Route exact path={routes.register} component={RegisterPage}/>
             
 
-              <PublicRoute exact path={routes.account} component={AccountPage} />
-              <PublicRoute exact path={routes.avances} component={AvancesPage} />
-              <PublicRoute exact path={routes.projects} component={ProjectsPage} />
-              <PublicRoute exact path={routes.InscriptionPage} component={InscriptionPage}/>
-              <PublicRoute hasRole={roles.admin} exact path={routes.users.admin}  component={UsersPage} />
+              <Route exact path={routes.account} component={AccountPage} />
+              <Route exact path={routes.avances} component={AvancesPage} />
+              <Route exact path={routes.projects} component={ProjectsPage} />
+              <Route exact path={routes.InscriptionPage} component={InscriptionPage}/>
+              <Route hasRole={roles.admin} exact path={routes.users.admin}  component={UsersPage} />
               <Route path ="*" component={NotFoundPage}/>
              </Switch>
     )
